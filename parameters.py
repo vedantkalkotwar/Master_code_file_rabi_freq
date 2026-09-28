@@ -1,0 +1,22 @@
+#constant
+f_start=2e9
+f_stop=4e9
+CuThick=0.05
+gl_dim=[50,50,1.5]
+gp_dim=[50,50,CuThick]
+gap_width=0.5
+feed_width=1.0
+inner_rad=1.0
+outer_rad=2.0
+f0=(f_start+f_stop)/2
+fc=(f_stop-f_start)/2
+speratral_res=[0.1,0.1]
+NV_dim=[3,3,0.5]
+gap_diamond=0.0
+unit=1e-3
+gap_co=1.5
+epsilon_r = 5.7
+mu_r = 1
+C0=3e8
+observation_plane=gap_diamond+0.2
+f_meas=2.87e9
