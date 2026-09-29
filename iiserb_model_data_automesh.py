@@ -94,8 +94,8 @@ port_2=FDTD.AddLumpedPort(2, port_impedance, [gl_dim[0]/2, feed_width/2, -gl_dim
 port = [port_1, port_2]
 
 #feild-dump
-hfield = CSX.AddDump('HField', dump_type=11, frequency=f_meas,dump_mode = 2, file_type=1)
-hfield.AddBox(start=[-2, -2+(feed_width/2+inner_rad), 0.0],stop =[ 2,  2+(feed_width/2+inner_rad), 1.0])
+hfield = CSX.AddDump('HField', dump_type=11, frequency=f_meas, file_type=1)
+hfield.AddBox(start=[-dump_dim[0], -dump_dim[1]+(feed_width/2+inner_rad), 0.0],stop =[ dump_dim[0],  dump_dim[1]+(feed_width/2+inner_rad), dump_dim[2]])
 
 #mesh
 mesh.AddLine('z',[0,observation_plane,-gl_dim[2]])
@@ -107,11 +107,11 @@ csx_file = os.path.join(sim_dir, 'antenna_layout.xml')
 if not os.path.exists(sim_dir):
     os.makedirs(sim_dir)
 CSX.Write2XML(csx_file)
-subprocess.Popen([AppCSXCAD_BIN, csx_file])
+#subprocess.Popen([AppCSXCAD_BIN, csx_file])
 
 
-#os.environ['PATH'] = r"D:\Obsidian\Study\MS Thesis\Master_code_file_rabi_freq\openEMS"
-#FDTD.Run(os.path.join(workspace_root,'omega_loop'),cleanup=True)
+os.environ['PATH'] = r"D:\Obsidian\Study\MS Thesis\Master_code_file_rabi_freq\openEMS"
+FDTD.Run(os.path.join(workspace_root,'omega_loop'),cleanup=True)
 
 
 

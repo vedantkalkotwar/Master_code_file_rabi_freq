@@ -4,6 +4,7 @@ f_stop=4e9
 CuThick=0.05
 gl_dim=[50,50,1.5]
 gp_dim=[50,50,CuThick]
+dump_dim=[-2,2,1]
 gap_width=0.5
 feed_width=1.0
 inner_rad=1.0
