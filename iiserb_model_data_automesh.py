@@ -61,12 +61,16 @@ sub.SetPriority(20)
 #Feedline
 strip1=ground.AddBox(start=[-gp_dim[0]/2,-feed_width/2, 0],stop=[-gap_width/2, feed_width/2, 0])
 strip2=ground.AddBox(start=[gp_dim[0]/2,-feed_width/2, 0],stop=[gap_width/2, feed_width/2, 0])
+strip3=ground.AddBox(start=[-gap_width/2.0, feed_width/2+inner_rad, 0.0], stop=[-gap_width/2.0-feed_width, -feed_width/2, 0.0])
+strip4=ground.AddBox(start=[gap_width/2.0, feed_width/2+inner_rad, 0.0], stop=[gap_width/2.0+feed_width, -feed_width/2, 0.0])
 strip1.SetPriority(40)
 strip2.SetPriority(40)
+strip3.SetPriority(40)
+strip4.SetPriority(40)
 
 #Circular
 phi = np.linspace(0, 2*np.pi, 50)
-cyl1= ground.AddPolygon(np.vstack((outer_rad * np.cos(phi), outer_rad * np.sin(phi)+(feed_width/2+(outer_rad-inner_rad)))), norm_dir=2, elevation=0)
+cyl1= ground.AddPolygon(np.vstack((outer_rad * np.cos(phi), outer_rad * np.sin(phi)+(feed_width/2+(outer_rad-inner_rad)+circle_hight))), norm_dir=2, elevation=0)
 cyl1.SetPriority(40)
 
 #Coplainer Waveguide
@@ -78,9 +82,9 @@ cyl1.SetPriority(40)
 #etched
 etch_material = CSX.AddMaterial('etched_regions', epsilon=1.0)
 #cut_cyl = etch_material.AddCylinder(start=[0.0, feed_width/2+(outer_rad-inner_rad),0.0],stop=[0.0, feed_width/2+(outer_rad-inner_rad), gap_diamond],norm_dir=2,radius=inner_rad)
-cut_cyl = etch_material.AddPolygon(np.vstack((inner_rad * np.cos(phi), inner_rad * np.sin(phi)+(feed_width/2+(outer_rad-inner_rad)))), norm_dir=2, elevation=0)
+cut_cyl = etch_material.AddPolygon(np.vstack((inner_rad * np.cos(phi), inner_rad * np.sin(phi)+(feed_width/2+(outer_rad-inner_rad)+circle_hight))), norm_dir=2, elevation=0)
 cut_cyl.SetPriority(50)
-cut_box = etch_material.AddBox(start=[-gap_width/2.0, feed_width/2+inner_rad, 0.0], stop=[gap_width/2.0, -feed_width/2, gap_diamond])
+cut_box = etch_material.AddBox(start=[-gap_width/2.0, feed_width/2+inner_rad, 0.0], stop=[gap_width/2.0, -feed_width/2, 0.0])
 cut_box.SetPriority(50)
 
 #Diamond
