@@ -39,4 +39,4 @@ Rabi frequency map for the four NV orientations, given by
 
 where \(B_\perp\) is the microwave field component perpendicular to the NV axis.
 
-![Rabi frequency](asset/rabi_frequency.png)
+![Rabi frequency](asset/zoomed_rabi_freq.png)
