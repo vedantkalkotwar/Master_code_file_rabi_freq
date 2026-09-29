@@ -13,9 +13,9 @@ Simulation results for a planar microwave antenna (circular radiating pad with a
 
 Sharp resonance near \(3.18\,\mathrm{GHz}\).
 
-| Default | Gap = 1.0 |
+| Default |
 |:---:|:---:|
-| ![S11](asset/S11.png) | ![S11 gap 1.0](asset/S11_gap_1_0.png) |
+| ![S11](asset/S11.png) |
 
 ## 2. Feed-Port Admittance
 
