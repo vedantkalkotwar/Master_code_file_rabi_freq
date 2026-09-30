@@ -12,8 +12,6 @@ from CSXCAD import ContinuousStructure,AppCSXCAD_BIN
 from easyMesh import GenerateMesh, enhance_csx_for_auto_mesh, enhance_FDTD_for_auto_mesh
 
 
-
-
 CSX = ContinuousStructure()
 FDTD = openEMS.openEMS(EndCriteria=1e-4)
 FDTD.SetCSX(CSX)
@@ -31,8 +29,8 @@ global_mesh_setup = {
     'drawing_unit': unit,
     'start_frequency': f_start,
     'stop_frequency': f_stop,
-    'mesh_resolution': 'high',  # 'low', 'medium', 'high', 'very_high'
-    'smooth_metal_edge': 'False', # useful for thin metal layers, Options: False, 'one_third_two_thirds', 'extra_lines', 
+    'mesh_resolution': 'very_high',  # 'low', 'medium', 'high', 'very_high'
+    'smooth_metal_edge': 'one_third_two_thirds', # useful for thin metal layers, Options: False, 'one_third_two_thirds', 'extra_lines', 
     'use_circle_detection': True,
     'boundary_distance': ['auto', 'auto', 'auto', 'auto', -gl_dim[2], 'auto'], # value, 'auto' or None
     'handle_closely_placed_edges': False,  # if True, then mesher will try to handle close placed edges by merging them
@@ -81,7 +79,6 @@ cyl1.SetPriority(40)
 
 #etched
 etch_material = CSX.AddMaterial('etched_regions', epsilon=1.0)
-#cut_cyl = etch_material.AddCylinder(start=[0.0, feed_width/2+(outer_rad-inner_rad),0.0],stop=[0.0, feed_width/2+(outer_rad-inner_rad), gap_diamond],norm_dir=2,radius=inner_rad)
 cut_cyl = etch_material.AddPolygon(np.vstack((inner_rad * np.cos(phi), inner_rad * np.sin(phi)+(feed_width/2+(outer_rad-inner_rad)+circle_hight))), norm_dir=2, elevation=0)
 cut_cyl.SetPriority(50)
 cut_box = etch_material.AddBox(start=[-gap_width/2.0, feed_width/2+inner_rad, 0.0], stop=[gap_width/2.0, -feed_width/2, 0.0])
@@ -106,21 +103,21 @@ mesh.AddLine('z',[0,observation_plane,-gl_dim[2]])
 GenerateMesh(CSX, global_mesh_setup, primitives_mesh_setup, properties_mesh_setup)
 
 workspace_root = os.getcwd()
-sim_dir = os.path.join(workspace_root,'omega_loop')
+sim_dir = os.path.join(workspace_root,'omega_loop_bet_mesh')
 csx_file = os.path.join(sim_dir, 'antenna_layout.xml')
 if not os.path.exists(sim_dir):
     os.makedirs(sim_dir)
 CSX.Write2XML(csx_file)
-subprocess.Popen([AppCSXCAD_BIN, csx_file])
+#subprocess.Popen([AppCSXCAD_BIN, csx_file])
 
 
-#os.environ['PATH'] = r"D:\Obsidian\Study\MS Thesis\Master_code_file_rabi_freq\openEMS"
-#FDTD.Run(os.path.join(workspace_root,'omega_loop'),cleanup=True)
+os.environ['PATH'] = r"D:\Obsidian\Study\MS Thesis\Master_code_file_rabi_freq\openEMS"
+FDTD.Run(os.path.join(workspace_root,'omega_loop_bet_mesh'),cleanup=True)
 
 
 
 freq = np.linspace(f0 - fc, f0 + fc, 501)
-port[0].CalcPort(os.path.join(workspace_root,'omega_loop'), freq)
+port[0].CalcPort(os.path.join(workspace_root,'omega_loop_bet_mesh'), freq)
 
 Zin = port[0].uf_tot / port[0].if_tot
 s11 = port[0].uf_ref / port[0].uf_inc
@@ -145,13 +142,10 @@ ax.legend()
 ax.grid(True)
 
 from matplotlib.widgets import Slider
-import os
-import numpy as np
 import h5py
 import matplotlib.pyplot as plt
-from matplotlib.widgets import Slider
 
-h5_path = os.path.join(workspace_root, 'omega_loop', 'HField.h5')
+h5_path = os.path.join(workspace_root, 'omega_loop_bet_mesh', 'HField.h5')
 
 with h5py.File(h5_path, 'r') as f:
     x = f['Mesh/x'][:] / unit          # (24,)
